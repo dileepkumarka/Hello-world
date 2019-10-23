@@ -1,0 +1,27 @@
+.Suggestions {
+  /* background-color: yellow; */
+  list-style: none;
+  text-align: left;
+  padding-inline-start: 0px;
+  width: 280px;
+}
+.Suggestions li {
+  height: 40;
+  padding: 10px 10px 10px 10px;
+}
+
+.Suggestions li:hover {
+  background-color: #efefef;
+  height: 40;
+  padding: 10px 10px 10px 15px;
+}
+/* .Suggestions li:not(:nth-last-of-type()){
+    background-color: #efefef;
+    height: 40;
+    padding: 10px 10px 10px 15px; */
+  /* } */
+  /* .Suggestions li:nth-child(3){
+    background-color: #efefef;
+    height: 40;
+    padding: 10px 10px 10px 15px;
+  } */
