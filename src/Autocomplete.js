@@ -13,11 +13,19 @@ export class Autocomplete extends Component {
             suggestions: []
         };
     }
-    componentDidMount() {
-        this.fetchApi();
-    }
 
-    fetchApi = () => {
+    onChange = (e) => {
+        const userInputLocal = e.currentTarget.value;
+        this.setState({userInput:userInputLocal});
+        console.log(userInputLocal.length+ "" +userInputLocal);
+
+        if (userInputLocal.length >= 2) {
+            this.fetchApi(userInputLocal);
+        }
+    };
+
+    fetchApi = (userInput) => {
+        console.log("hagg");
         fetch(`http://irateu.in:8080/api/unhappylist/${encodeURIComponent('5d84e063fe29594a592be4a8')}/${encodeURIComponent('5d84e221fe29594a592be4ab')}`, {
             method: "GET",
             headers: {
@@ -25,41 +33,34 @@ export class Autocomplete extends Component {
                 'Authorization': `Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWQiOiI1ZDg0ZTM4MGZiYjJiZTc2ZWNlMzU4MWIiLCJleHAiOjE1NzIyNTk0NTYsImlhdCI6MTU3MTgyNzQ1Nn0.0BeNzYs5hh_UN7IqlWhasy_z7mehhz0jVLv5ZNchBHA`
             },
         })
-            .then((response) => response.json())
-            .then((res) => {
-                if (res.success === true) {
-                    if (res.reviewArr.length <= 0) {
-                    }
-                    else {
-                        this.setState({ suggestions: res.reviewArr })
-                    }
+        .then((response) => response.json())
+        .then((res) => {
+            if (res.success === true) {
+                if (res.reviewArr.length <= 0) {
                 }
                 else {
-                    console.log("Something wrong in unhappy customer page!");
+                    const dataArray = this.attrArray(res.reviewArr);
+                    const filteredSuggestions = dataArray.filter(
+                        (suggestion) =>
+                            suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+                    );
+                    this.setState({
+                        activeSuggestion: 0,
+                        filteredSuggestions,
+                        showSuggestions: true,
+                        userInput: userInput
+                    });
+                    this.setState({ suggestions: res.reviewArr })
                 }
-            })
-            .catch((err) => {
-                console.log("Failed to fetch unhappy customer list", err);
-            })
+            }
+            else {
+                console.log("Something wrong in unhappy customer page!");
+            }
+        })
+        .catch((err) => {
+            console.log("Failed to fetch unhappy customer list", err);
+        })
     }
-
-    onChange = (e) => {
-        const { suggestions } = this.state;
-        const userInput = e.currentTarget.value;
-        const dataArray = this.attrArray(suggestions);
-        const filteredSuggestions = dataArray.filter(
-            (suggestion) =>
-            suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-        );
-
-        this.setState({
-            activeSuggestion: 0,
-            filteredSuggestions,
-            showSuggestions: true,
-            userInput: e.currentTarget.value
-        });
-    };
-
 
     attrArray = (suggestions) => {
         const data = [];
