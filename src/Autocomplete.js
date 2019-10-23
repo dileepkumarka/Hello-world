@@ -25,7 +25,6 @@ export class Autocomplete extends Component {
     };
 
     fetchApi = (userInput) => {
-        console.log("hagg");
         fetch(`http://irateu.in:8080/api/unhappylist/${encodeURIComponent('5d84e063fe29594a592be4a8')}/${encodeURIComponent('5d84e221fe29594a592be4ab')}`, {
             method: "GET",
             headers: {
@@ -70,6 +69,7 @@ export class Autocomplete extends Component {
         return data;
     }
     onClick = (e) => {
+        this.props.callbackFromParent("listInfo");
         this.setState({
             activeSuggestion: 0,
             filteredSuggestions: [],
@@ -82,6 +82,7 @@ export class Autocomplete extends Component {
         const { activeSuggestion, filteredSuggestions } = this.state;
 
         if (e.keyCode === 13) {
+            this.props.callbackFromParent("listInfo");
             this.setState({
                 activeSuggestion: 0,
                 showSuggestions: false,
