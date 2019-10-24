@@ -15,9 +15,9 @@ export class Autocomplete extends Component {
     }
 
     onChange = (e) => {
+        const filteredSuggestions = []
         const userInputLocal = e.currentTarget.value;
-        this.setState({userInput:userInputLocal});
-        console.log(userInputLocal.length+ "" +userInputLocal);
+        this.setState({ userInput: userInputLocal,  filteredSuggestions});
 
         if (userInputLocal.length >= 2) {
             this.fetchApi(userInputLocal);
@@ -32,33 +32,33 @@ export class Autocomplete extends Component {
                 'Authorization': `Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWQiOiI1ZDg0ZTM4MGZiYjJiZTc2ZWNlMzU4MWIiLCJleHAiOjE1NzIyNTk0NTYsImlhdCI6MTU3MTgyNzQ1Nn0.0BeNzYs5hh_UN7IqlWhasy_z7mehhz0jVLv5ZNchBHA`
             },
         })
-        .then((response) => response.json())
-        .then((res) => {
-            if (res.success === true) {
-                if (res.reviewArr.length <= 0) {
+            .then((response) => response.json())
+            .then((res) => {
+                if (res.success === true) {
+                    if (res.reviewArr.length <= 0) {
+                    }
+                    else {
+                        const dataArray = this.attrArray(res.reviewArr);
+                        const filteredSuggestions = dataArray.filter(
+                            (suggestion) =>
+                                suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+                        );
+                        this.setState({
+                            activeSuggestion: 0,
+                            filteredSuggestions,
+                            showSuggestions: true,
+                            userInput: userInput
+                        });
+                        this.setState({ suggestions: res.reviewArr })
+                    }
                 }
                 else {
-                    const dataArray = this.attrArray(res.reviewArr);
-                    const filteredSuggestions = dataArray.filter(
-                        (suggestion) =>
-                            suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-                    );
-                    this.setState({
-                        activeSuggestion: 0,
-                        filteredSuggestions,
-                        showSuggestions: true,
-                        userInput: userInput
-                    });
-                    this.setState({ suggestions: res.reviewArr })
+                    console.log("Something wrong in unhappy customer page!");
                 }
-            }
-            else {
-                console.log("Something wrong in unhappy customer page!");
-            }
-        })
-        .catch((err) => {
-            console.log("Failed to fetch unhappy customer list", err);
-        })
+            })
+            .catch((err) => {
+                console.log("Failed to fetch unhappy customer list", err);
+            })
     }
 
     attrArray = (suggestions) => {
@@ -121,9 +121,24 @@ export class Autocomplete extends Component {
         alert(this.state.userInput);
     }
 
+    listData = (e) => {
+        const { suggestionData } = this.props;
+        const { userInput } = this.state;
+        if (userInput <= 0) {
+            const filteredSuggestions = suggestionData
+            this.setState({
+                activeSuggestion: 0,
+                filteredSuggestions,
+                showSuggestions: true,
+            });
+        }
+
+    }
+
     render() {
         const {
             onChange,
+            listData,
             onClick,
             onKeyDown,
             state: {
@@ -132,9 +147,9 @@ export class Autocomplete extends Component {
                 userInput
             }
         } = this;
-
+        console.log(filteredSuggestions);
         let suggestionsListComponent;
-        if (showSuggestions && userInput) {
+        if (showSuggestions) {
             if (filteredSuggestions.length) {
                 suggestionsListComponent = (
                     <ul id="abc" className="Suggestions">
@@ -163,6 +178,7 @@ export class Autocomplete extends Component {
                     className="inputField"
                     onChange={onChange}
                     onKeyDown={onKeyDown}
+                    onFocus={listData}
                     value={userInput}
                 />
                 <button onClick={this.handleClick}>
