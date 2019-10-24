@@ -121,20 +121,6 @@ export class Autocomplete extends Component {
         alert(this.state.userInput);
     }
 
-    listData = (e) => {
-        const { suggestionData } = this.props;
-        const { userInput } = this.state;
-        if (userInput <= 0) {
-            const filteredSuggestions = suggestionData
-            this.setState({
-                activeSuggestion: 0,
-                filteredSuggestions,
-                showSuggestions: true,
-            });
-        }
-
-    }
-
     render() {
         const {
             onChange,
