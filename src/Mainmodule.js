@@ -58,7 +58,7 @@ export class Mainmodule extends Component {
 
         return (
             <div className="App">
-                <Autocomplete callbackFromParent={this.myCallback.bind(this)} suggestionData={["Apple", "Orange", "Food", "Trest"]}/>
+                <Autocomplete callbackFromParent={this.myCallback.bind(this)} />
                 <div>  {searchItem}</div>
                 {/* <Listitem reactProp={this.state.dataSource} /> */}
             </div>
