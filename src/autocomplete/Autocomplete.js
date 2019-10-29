@@ -140,7 +140,6 @@ export class Autocomplete extends Component {
     }
 
     render() {
-        console.log(this.props.personalValue, "autocompleteœ");
         const {
             onChange,
             listData,

@@ -11,8 +11,7 @@ export class Mainmodule extends Component {
         this.state = {
             education: [],
             personal: [],
-            dataSource: [],
-            personalValue: ""
+            dataSource: []
         };
     }
 
@@ -42,9 +41,6 @@ export class Mainmodule extends Component {
                 console.log("Failed to fetch unhappy customer list", err);
             })
     }
-    getValue = (e)=>{
-       this.setState({personalValue: e})
-    }
     render() {
         const { dataSource } = this.state
         let searchItem;
@@ -66,12 +62,13 @@ export class Mainmodule extends Component {
         }
         return (
             <div className="App">
-                <Autocomplete callbackFromParent={this.myCallback.bind(this)} suggestionData={["Apple", "Orange", "Food", "Trest"]} personalValue={this.state.personalValue} />
+                <Autocomplete callbackFromParent={this.myCallback.bind(this)} suggestionData={["Apple", "Orange", "Food", "Trest"]} />
                 <PersonalStatus personal={this.state.personal} />
                 <EducationStatus education={this.state.education} />
                 <ul>
-                    <li value={"sanju"} onClick={(val)=>this.getValue("sanju")}>Sanju</li>
-                    {/* <li onClick={this.getValue}>Akhil</li> */}
+                    <li>Sanju</li>
+                    <li>Akhil</li>
+                    <li>Jovish</li>
                 </ul>
                 {/* <div>  {searchItem}</div> */}
                 {/* <Listitem reactProp={this.state.dataSource} /> */}
