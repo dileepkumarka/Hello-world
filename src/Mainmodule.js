@@ -2,42 +2,102 @@ import React, { Component } from 'react';
 import Autocomplete from './Autocomplete';
 // import Listitem from './Listitem';
 
+class NavItem extends Component {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(ev, e) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onCategorySelection(e);
+    }
+
+    render() {
+        const { data } = this.props;
+        return (
+            <li onClick={(event) => this.handleClick(event, data.queryStringParam)}>
+                <a href="!#"> {data.label} ({data.count}) </a>
+                {
+                    data['subCategory'] && data['subCategory'].length ? (
+                        <ul> {data['subCategory'].map((s, _index) => (<li key={_index} onClick={(event) => this.handleClick(event, s.queryStringParam)}><a href="!#">{s.label} ({s.count})</a></li>))}</ul>
+                    ) : ''
+                }
+            </li>
+        )
+    }
+}
+
+class NavList extends Component {
+    constructor(props) {
+        super(props);
+        this.handleCategorySelection = this.handleCategorySelection.bind(this);
+    }
+
+    handleCategorySelection(e) {
+        this.props.onCategoryClick(e);
+    }
+
+    render() {
+        return <ul>{this.props.data.map((res, index) => <NavItem key={index.toString()} data={res} onCategorySelection={this.handleCategorySelection} />)}</ul>
+    }
+}
+
 export class Mainmodule extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            response: [],
             dataSource: []
         };
     }
 
+    manipulateResponse = (facets) => {
+        const data = facets.find(f => f.name === "Site sections");
+        if (data) {
+            let sectionList = data.allValues.map(d => {
+                const facet = facets.find(f => f.name === d.label);
+                if (facet) {
+                    d['subCategory'] = facet.allValues;
+                }
+                return d;
+            })
+            this.setState({ response: sectionList || [] });
+        }
+    }
+
+    componentDidMount() {
+        console.log("loaded");
+        fetch('http://medibank-search.clients.funnelback.com/s/search.json?profile=_default&query=insurance&collection=medibank&num_ranks=500')
+            .then(response => response.json())
+            .then((res) => {
+                console.log("res", res);
+                this.manipulateResponse(res.response.facets);
+            })
+            .catch((err) => {
+                console.log("res", err);
+            })
+    }
+
     myCallback = (dataFromChild) => {
-        fetch(`http://irateu.in:8080/api/unhappylist/${encodeURIComponent('5d84e063fe29594a592be4a8')}/${encodeURIComponent('5d84e221fe29594a592be4ab')}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWQiOiI1ZDg0ZTM4MGZiYjJiZTc2ZWNlMzU4MWIiLCJleHAiOjE1NzIyNTk0NTYsImlhdCI6MTU3MTgyNzQ1Nn0.0BeNzYs5hh_UN7IqlWhasy_z7mehhz0jVLv5ZNchBHA`
-            },
-        })
+        fetch('http://medibank-search.clients.funnelback.com/s/search.json?profile=_default&query=insurance&collection=medibank&num_ranks=500')
             .then((response) => response.json())
             .then((res) => {
-                if (res.success === true) {
-                    if (res.reviewArr.length <= 0) {
-                    }
-                    else {
-                        this.setState({ dataSource: res.reviewArr })
-                    }
-                }
-                else {
-                    console.log("Something wrong in unhappy customer page!");
-                }
+                console.log(res, "api")
             })
             .catch((err) => {
                 console.log("Failed to fetch unhappy customer list", err);
             })
     }
+
+    handleCategoryClick = (e) => {
+        alert(e);
+    }
+
     render() {
-        const { dataSource } = this.state
+        const { dataSource } = this.state;
         let searchItem;
         if (dataSource.length <= 0) { console.log("no data"); }
 
@@ -52,17 +112,20 @@ export class Mainmodule extends Component {
                             </li>
                         );
                     })}
+
                 </ul>
             );
         }
 
         return (
             <div className="App">
-                <Autocomplete callbackFromParent={this.myCallback.bind(this)} />
+                <Autocomplete callbackFromParent={this.myCallback.bind(this)} suggestionData={["Apple", "Orange", "Food", "Trest"]} />
                 <div>  {searchItem}</div>
                 {/* <Listitem reactProp={this.state.dataSource} /> */}
+                <NavList data={this.state.response} onCategoryClick={this.handleCategoryClick} />
             </div>
         );
     }
 }
+
 export default Mainmodule;
