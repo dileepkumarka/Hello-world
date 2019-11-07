@@ -67,7 +67,7 @@ export class Mainmodule extends Component {
         // }
         return (
             <div className="App">
-                <Typehead/>
+                <Typehead options={["sanju", "akhil", "kannan","manu"]}/>
                 {/* <Autocomplete callbackFromParent={this.myCallback.bind(this)} suggestionData={["Apple", "Orange", "Food", "Trest"]} personalValue={this.state.personalValue} />
                 <PersonalStatus personal={this.state.personal} />
                 <EducationStatus education={this.state.education} /> */}

@@ -10,13 +10,12 @@ export default class Typehead extends Component {
         }
     }
     render() {
-        const options = ["sanju", "sri"]
         return (
             <Typeahead
         {...this.state}
         id="basic-example"
         onChange={selected => this.setState({ selected })}
-        options={options}
+        options={this.props.options}
         placeholder="Choose a state..."
       />
         )
