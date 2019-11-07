@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Autocomplete from './Autocomplete';
 import PersonalStatus from './Personalstatus';
-import EducationStatus from './Educationstatus'
+import EducationStatus from './Educationstatus';
+import Typehead from './typehead';
 // import Listitem from './Listitem';
 
 export class Mainmodule extends Component {
@@ -46,33 +47,34 @@ export class Mainmodule extends Component {
        this.setState({personalValue: e})
     }
     render() {
-        const { dataSource } = this.state
-        let searchItem;
-        if (dataSource.length <= 0) { console.log("no data"); }
+        // const { dataSource } = this.state
+        // let searchItem;
+        // if (dataSource.length <= 0) { console.log("no data"); }
 
-        else {
-            searchItem = (
-                <ul id="abc" className="Suggestions">
-                    {dataSource.map((res, index) => {
+        // else {
+        //     searchItem = (
+        //         <ul id="abc" className="Suggestions">
+        //             {dataSource.map((res, index) => {
 
-                        return (
-                            <li key={res._id}>
-                                {res.customer_name}
-                            </li>
-                        );
-                    })}
-                </ul>
-            );
-        }
+        //                 return (
+        //                     <li key={res._id}>
+        //                         {res.customer_name}
+        //                     </li>
+        //                 );
+        //             })}
+        //         </ul>
+        //     );
+        // }
         return (
             <div className="App">
-                <Autocomplete callbackFromParent={this.myCallback.bind(this)} suggestionData={["Apple", "Orange", "Food", "Trest"]} personalValue={this.state.personalValue} />
+                <Typehead/>
+                {/* <Autocomplete callbackFromParent={this.myCallback.bind(this)} suggestionData={["Apple", "Orange", "Food", "Trest"]} personalValue={this.state.personalValue} />
                 <PersonalStatus personal={this.state.personal} />
-                <EducationStatus education={this.state.education} />
-                <ul>
-                    <li value={"sanju"} onClick={(val)=>this.getValue("sanju")}>Sanju</li>
+                <EducationStatus education={this.state.education} /> */}
+                {/* <ul>
+                    <li value={"sanju"} onClick={(val)=>this.getValue("sanju")}>Sanju</li> */}
                     {/* <li onClick={this.getValue}>Akhil</li> */}
-                </ul>
+                {/* </ul> */}
                 {/* <div>  {searchItem}</div> */}
                 {/* <Listitem reactProp={this.state.dataSource} /> */}
             </div>
