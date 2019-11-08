@@ -1,4 +1,4 @@
-async function API(url, params, token) {
+async function GetAPI(url, params, token) {
     const baseUrl = 'http://irateu.in:8080/api/';
     const response = await fetch(`${baseUrl}${url}/${encodeURIComponent(params.client_id)}/${encodeURIComponent(params.branch_id)}`, {
         method: 'GET',
@@ -11,4 +11,4 @@ async function API(url, params, token) {
     const data = await response.json();
     return data
 }
-export default API;
+export default GetAPI;

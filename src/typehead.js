@@ -3,7 +3,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import ReactDOM from 'react-dom';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import API from './api/api';
+import GetAPI from './api/api';
 export default class Typehead extends Component {
     constructor(props) {
         super(props)
@@ -24,7 +24,7 @@ export default class Typehead extends Component {
             branch_id: '5d84e221fe29594a592be4ab'
         }
         const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWQiOiI1ZDg0ZTM4MGZiYjJiZTc2ZWNlMzU4MWIiLCJleHAiOjE1NzM1ODAwMTMsImlhdCI6MTU3MzE0ODAxM30._lqdwEzsQjJFwnmeSBG-KAoorYP1uMnrPMmr9wPxBAs'
-        API('unhappylist', params, token)
+        GetAPI('unhappylist', params, token)
             .then((res) => {
                res.reviewArr.map((e)=>{
                 dataSource.push(e.customer_name)
@@ -42,7 +42,7 @@ export default class Typehead extends Component {
             branch_id: '5d84e221fe29594a592be4ab'
         }
         const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWQiOiI1ZDg0ZTM4MGZiYjJiZTc2ZWNlMzU4MWIiLCJleHAiOjE1NzM1ODAwMTMsImlhdCI6MTU3MzE0ODAxM30._lqdwEzsQjJFwnmeSBG-KAoorYP1uMnrPMmr9wPxBAs'
-        API('unhappylist', params, token)
+        GetAPI('unhappylist', params, token)
             .then((res) => {
                 console.log("res", res);
             })
